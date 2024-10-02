@@ -1,0 +1,50 @@
+name: Build OpenWrt
+
+on:
+  push:
+    branches:
+      - openwrt-21.02
+  pull_request:
+    branches:
+      - openwrt-21.02
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+      with:
+        ref: openwrt-21.02
+
+    - name: Set up build environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libncurses5-dev gawk git subversion libssl-dev gettext unzip zlib1g-dev file wget
+
+    - name: Install OpenWrt SDK
+      run: |
+        git clone -b openwrt-21.02 https://github.com/openwrt/openwrt.git
+        cd openwrt
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+
+    - name: Configure build
+      run: |
+        cd openwrt
+        make menuconfig  # 或者使用默认配置
+
+    - name: Build OpenWrt
+      run: |
+        cd openwrt
+        make -j$(nproc)
+    
+    - name: Upload firmware to GitHub Releases
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: openwrt/bin/targets/**/*
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref }}
+        name: OpenWrt 21.02 Build
+        body: |
+          Automated build of OpenWrt 21.02 for OrangePi R1 Plus LTS
