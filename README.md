@@ -25,8 +25,10 @@ the [Build System Setup](https://openwrt.org/docs/guide-developer/build-system/i
 documentation.
 
 ```
-gcc binutils bzip2 flex python3 perl make find grep diff unzip gawk getopt
-subversion libz-dev libc-dev rsync which
+gcc binutils bzip2 flex python3 perl make grep unzip 
+swig gawk subversion libz-dev libc-dev rsync libncurses5-dev
+libncursesw5-dev libpam0g-dev liblzma-dev libsnmp-dev
+libnetfilter-queue-dev liblzma-dev libpam0g-dev
 ```
 
 ### Quickstart
