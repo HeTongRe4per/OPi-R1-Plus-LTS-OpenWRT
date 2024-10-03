@@ -18,6 +18,11 @@ jobs:
         with:
           ref: openwrt-21.01
 
+      - name: Show git config
+        run: |
+          git config --list
+          git branch -a
+
       - name: Set up Build Environment
         run: |
           sudo apt-get update
