@@ -50,8 +50,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.sha }}
-          release_name: "OpenWrt Build ${{ github.sha }}"
+          tag_name: "openwrt-build-$(date +'%Y%m%d-%H%M%S')"
+          release_name: "OpenWrt Build $(date +'%Y-%m-%d %H:%M:%S')"
           draft: false
           prerelease: false
 
