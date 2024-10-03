@@ -4,13 +4,12 @@ on:
   push:
     branches:
       - openwrt-21.02
+    tags:
+      - 'v*.*.*'  # 当推送新的标签时触发
   pull_request:
     branches:
       - openwrt-21.02
   workflow_dispatch:
-  push:
-    tags:
-      - 'v*.*.*'  # 当推送新的标签时触发
 
 jobs:
   build:
@@ -69,17 +68,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
 
     - name: Upload files to release
       env:
