@@ -50,24 +50,27 @@ jobs:
       - name: Set Tag Prefix
         run: echo "TAG_PREFIX=${GITHUB_REF_NAME:0:7}" >> $GITHUB_ENV
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: openwrt-build-${{ env.TAG_PREFIX }}-${{ github.sha }}
-          release_name: OpenWrt Build ${{ github.run_number }}
-          draft: false
-          prerelease: false
-
-  upload-release-assets:
+  create-and-upload-release-assets:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: openwrt-build-${{ env.TAG_PREFIX }}-${{ github.sha }}
+        release_name: OpenWrt Build ${{ github.run_number }}
+        draft: false
+        prerelease: false
+
+    - name: List files
+      run: ls -alFh
 
     - name: Upload files to release
       env:
