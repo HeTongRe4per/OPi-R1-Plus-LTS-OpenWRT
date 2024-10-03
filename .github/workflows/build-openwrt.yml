@@ -34,11 +34,13 @@ jobs:
           ./scripts/feeds install -a
           make -j$(nproc)
 
-      - name: Archive build output
+      - name: Prepare release directory
         run: |
           mkdir -p release
           cp bin/targets/rockchip/armv8/* release/
           rm -rf release/packages
+
+      - name: Archive build output
         uses: actions/upload-artifact@v3
         with:
           name: openwrt-build
