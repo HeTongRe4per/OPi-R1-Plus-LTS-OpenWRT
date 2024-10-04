@@ -83,6 +83,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          RELEASE_TAG="openwrt-build-${{ env.TAG_PREFIX }}-${{ github.sha }}"
           find ./bin/targets/rockchip/armv8 -maxdepth 1 -type f | while read file; do
-            gh release upload ${{ steps.create_release.outputs.id }} "$file" --clobber
+            gh release upload "$RELEASE_TAG" "$file" --clobber
           done
+
