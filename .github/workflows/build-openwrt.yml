@@ -18,8 +18,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          ref: openwrt-21.02
+
+      - name: Manually Clone and Update Submodules
+        run: |
+          git submodule deinit -f .
+          git submodule sync
+          git submodule update --init --recursive --remote
+          git submodule foreach git pull origin master
 
       - name: Show git config
         run: |
@@ -33,8 +38,6 @@ jobs:
 
       - name: Modify CMakeLists.txt for UA2F
         run: |
-          ls -alFh package/others
-          ls -alFh package/others/UA2F
           sed -i 's/set(CMAKE_C_STANDARD 17)/set(CMAKE_C_STANDARD 11)/' package/others/UA2F/CMakeLists.txt
 
       - name: Compile OpenWrt
@@ -42,7 +45,6 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           make defconfig
-          ls -alFh package/others
           make -j$(nproc)
 
       - name: List files
@@ -61,15 +63,6 @@ jobs:
       - name: Set Tag Prefix
         run: echo "TAG_PREFIX=${GITHUB_REF_NAME:0:7}" >> $GITHUB_ENV
 
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          ref: openwrt-21.02
-          submodules: true
-
-      - name: Initialize Submodules
-        run: git submodule update --init --recursive
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -80,9 +73,6 @@ jobs:
           release_name: OpenWrt Build ${{ github.run_number }}
           draft: false
           prerelease: false
-
-      - name: List files 2
-        run: ls -alFh
 
       - name: Upload files to release
         env:
