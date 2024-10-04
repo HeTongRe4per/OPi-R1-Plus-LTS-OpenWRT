@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
 
@@ -66,7 +66,7 @@ jobs:
             bin/targets/rockchip/armv8/packages/**
 
       - name: Set Tag Prefix
-        run: echo "TAG_PREFIX=${GITHUB_REF_NAME:0:7}" >> $GITHUB_ENV
+        run: echo "TAG_PREFIX=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
@@ -74,7 +74,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: openwrt-build-${{ env.TAG_PREFIX }}-${{ github.sha }}
+          tag_name: openwrt-build-${{ env.TAG_PREFIX }}
           release_name: OpenWrt Build ${{ github.run_number }}
           draft: false
           prerelease: false
@@ -83,8 +83,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          RELEASE_TAG="openwrt-build-${{ env.TAG_PREFIX }}-${{ github.sha }}"
+          RELEASE_TAG="openwrt-build-${{ env.TAG_PREFIX }}"
           find ./bin/targets/rockchip/armv8 -maxdepth 1 -type f | while read file; do
             gh release upload "$RELEASE_TAG" "$file" --clobber
           done
-
