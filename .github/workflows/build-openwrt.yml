@@ -66,7 +66,7 @@ jobs:
             bin/targets/rockchip/armv8/packages/**
 
       - name: Set Tag Prefix
-        run: echo "TAG_PREFIX=$(date +'%Y%m%d')" >> $GITHUB_ENV
+        run: echo "TAG_PREFIX=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
