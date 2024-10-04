@@ -1,0 +1,28 @@
+[submodule "package/others/autocore-arm"]
+	path = package/others/autocore-arm
+	url = git@github.com:sbwml/autocore-arm.git
+	branch = openwrt-21.02
+[submodule "package/others/UA2F"]
+	path = package/others/UA2F
+	url = git@github.com:Zxilly/UA2F.git
+[submodule "package/others/luci-app-advancedplus"]
+	path = package/others/luci-app-advancedplus
+	url = git@github.com:sirpdboy/luci-app-advancedplus.git
+[submodule "package/others/luci-app-mentohust"]
+	path = package/others/luci-app-mentohust
+	url = git@github.com:BoringCat/luci-app-mentohust.git
+[submodule "package/others/luci-app-netwizard"]
+	path = package/others/luci-app-netwizard
+	url = git@github.com:sirpdboy/luci-app-netwizard.git
+[submodule "package/others/luci-app-tcpdump"]
+	path = package/others/luci-app-tcpdump
+	url = git@github.com:KFERMercer/luci-app-tcpdump.git
+[submodule "package/others/luci-app-ua2f"]
+	path = package/others/luci-app-ua2f
+	url = git@github.com:lucikap/luci-app-ua2f.git
+[submodule "package/others/luci-theme-argon"]
+	path = package/others/luci-theme-argon
+	url = git@github.com:jerrykuku/luci-theme-argon.git
+[submodule "package/others/kmod-rkp-ipid"]
+	path = package/others/kmod-rkp-ipid
+	url = git@github.com:CHN-beta/rkp-ipid.git

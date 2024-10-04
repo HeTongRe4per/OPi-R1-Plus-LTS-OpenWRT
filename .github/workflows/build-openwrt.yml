@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - openwrt-21.02
-    tags:
-      - 'v*.*.*'  # 当推送新的标签时触发
   pull_request:
     branches:
       - openwrt-21.02
@@ -55,6 +53,8 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v3
+          with:
+            submodules: true
 
       - name: Create Release
         id: create_release
