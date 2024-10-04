@@ -33,7 +33,7 @@ jobs:
 
       - name: Modify CMakeLists.txt for UA2F
         run: |
-          ls -alFh package/others
+          ls -alFh package/others/UA2F
           sed -i 's/set(CMAKE_C_STANDARD 17)/set(CMAKE_C_STANDARD 11)/' package/others/UA2F/CMakeLists.txt
 
       - name: Compile OpenWrt
