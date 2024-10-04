@@ -19,12 +19,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Manually Clone and Update Submodules
+      - name: Clone submodules directly
         run: |
-          git submodule deinit -f .
-          git submodule sync
-          git submodule update --init --recursive --remote
-          git submodule foreach git pull origin master
+          git clone https://github.com/Zxilly/UA2F.git package/build-ext/UA2F
+          git clone --branch openwrt-21.02 https://github.com/sbwml/autocore-arm.git package/build-ext/autocore-arm
+          git clone https://github.com/CHN-beta/rkp-ipid.git package/build-ext/kmod-rkp-ipid
+          git clone https://github.com/sirpdboy/luci-app-advancedplus.git package/build-ext/luci-app-advancedplus
+          git clone https://github.com/BoringCat/luci-app-mentohust.git package/build-ext/luci-app-mentohust
+          git clone https://github.com/sirpdboy/luci-app-netwizard.git package/build-ext/luci-app-netwizard
+          git clone https://github.com/KFERMercer/luci-app-tcpdump.git package/build-ext/luci-app-tcpdump
+          git clone https://github.com/lucikap/luci-app-ua2f.git package/build-ext/luci-app-ua2f
+          git clone https://github.com/jerrykuku/luci-theme-argon.git package/build-ext/luci-theme-argon
 
       - name: Show git config
         run: |
@@ -38,7 +43,7 @@ jobs:
 
       - name: Modify CMakeLists.txt for UA2F
         run: |
-          sed -i 's/set(CMAKE_C_STANDARD 17)/set(CMAKE_C_STANDARD 11)/' package/others/UA2F/CMakeLists.txt
+          sed -i 's/set(CMAKE_C_STANDARD 17)/set(CMAKE_C_STANDARD 11)/' package/build-ext/UA2F/CMakeLists.txt
 
       - name: Compile OpenWrt
         run: |
