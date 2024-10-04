@@ -28,11 +28,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc binutils bzip2 flex python3 perl make grep unzip swig gawk subversion libz-dev libc-dev rsync libncurses5-dev libncursesw5-dev libpam0g-dev liblzma-dev libsnmp-dev libnetfilter-queue-dev liblzma-dev libpam0g-dev
 
+      - name: Modify CMakeLists.txt for UA2F
+        run: |
+          sed -i 's/set(CMAKE_C_STANDARD 17)/set(CMAKE_C_STANDARD 11)/' package/others/UA2F/CMakeLists.txt
+
       - name: Compile OpenWrt
         run: |
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           make defconfig
+          ls -alFh package/others
           make -j$(nproc)
 
       - name: List files
