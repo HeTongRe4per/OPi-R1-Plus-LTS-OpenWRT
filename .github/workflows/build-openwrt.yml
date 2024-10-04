@@ -37,6 +37,9 @@ jobs:
           make defconfig
           make -j$(nproc)
 
+      - name: List files
+        run: ls -alFh
+
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -50,32 +53,27 @@ jobs:
       - name: Set Tag Prefix
         run: echo "TAG_PREFIX=${GITHUB_REF_NAME:0:7}" >> $GITHUB_ENV
 
-  create-and-upload-release-assets:
-    needs: build
-    runs-on: ubuntu-latest
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: openwrt-build-${{ env.TAG_PREFIX }}-${{ github.sha }}
+          release_name: OpenWrt Build ${{ github.run_number }}
+          draft: false
+          prerelease: false
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: openwrt-build-${{ env.TAG_PREFIX }}-${{ github.sha }}
-        release_name: OpenWrt Build ${{ github.run_number }}
-        draft: false
-        prerelease: false
+      - name: List files 2
+        run: ls -alFh
 
-    - name: List files
-      run: ls -alFh
-
-    - name: Upload files to release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        find ./bin/targets/rockchip/armv8 -maxdepth 1 -type f | while read file; do
-          gh release upload ${{ steps.create_release.outputs.id }} "$file" --clobber
-        done
+      - name: Upload files to release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          find ./bin/targets/rockchip/armv8 -maxdepth 1 -type f | while read file; do
+            gh release upload ${{ steps.create_release.outputs.id }} "$file" --clobber
+          done
